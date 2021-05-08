@@ -10,11 +10,12 @@ from rest_framework import status
 #from rest_framework.views import APIView
 
 from account.serializers import RegistrationSerializer
+from account.models import Account
 
 # Create your views here.
 
 # using rest_framework.decorators
-@api_view(['POST',])
+@api_view(['POST','GET'])
 def registration_view(request):
 
     if request.method == 'POST':
@@ -28,3 +29,8 @@ def registration_view(request):
         else:
             data = serializer.errors
         return Response(data)
+
+    if request.method == 'GET':
+        accounts = Account.objects.all()
+        serializer = RegistrationSerializer(accounts, many=True)
+        return Response(serializer.data)

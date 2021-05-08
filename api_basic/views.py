@@ -10,6 +10,8 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework import mixins
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 # Create your views here.
 
@@ -20,8 +22,13 @@ class GenericAPIView(generics.GenericAPIView, mixins.ListModelMixin, mixins.Crea
                         mixins.DestroyModelMixin):
     serializer_class = ArticleSerializer
     queryset = Article.objects.all()
-
-    #lookup_field = ['id']
+    # filter data
+    #filter_backends = [DjangoFilterBackend]
+    #filterset_fields = ['title', 'author']
+    
+    # search data
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['author', 'email']
 
     def get(self, request, id=None):
         
